@@ -9,3 +9,4 @@ langchain-openai
 reportlab
 pillow
 python-dotenv
+streamlit-audiorec

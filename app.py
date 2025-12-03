@@ -663,9 +663,6 @@ with col_robot:
             
         robo_html = get_robo_html(st.session_state.latest_audio_path, autoplay=should_autoplay)
         components.html(robo_html, height=400)
-        
-        # Debug: Native Audio Player
-        # st.audio(st.session_state.latest_audio_path, format="audio/wav", autoplay=should_autoplay)
     else:
         # Placeholder or default state if needed
         st.markdown("""
@@ -683,30 +680,27 @@ with col_chat:
         if st.button("🎬 Start Interview", use_container_width=True, type="primary"):
             with st.spinner("Starting interview..."):
                 # Call start_interview from agent
-                try:
-                    agent_response, control_decision = start_interview()
-                    
-                    # Generate TTS for the greeting
-                    tts_audio_path = text_to_speech(agent_response)
-                    
-                    # Add assistant message to history
-                    st.session_state.conversation_history.append({
-                        "role": "assistant",
-                        "content": agent_response,
-                        "audio_path": tts_audio_path
-                    })
-                    
-                    # Set latest audio for the robot
-                    st.session_state.latest_audio_path = tts_audio_path
-                    
-                    # Update interview state
-                    st.session_state.interview_started = True
-                    if control_decision == "stop":
-                        st.session_state.interview_active = False
-                    
-                    st.rerun()
-                except Exception as e:
-                    st.error(f"Error during initialization: {str(e)}")
+                agent_response, control_decision = start_interview()
+                
+                # Generate TTS for the greeting
+                tts_audio_path = text_to_speech(agent_response)
+                
+                # Add assistant message to history
+                st.session_state.conversation_history.append({
+                    "role": "assistant",
+                    "content": agent_response,
+                    "audio_path": tts_audio_path
+                })
+                
+                # Set latest audio for the robot
+                st.session_state.latest_audio_path = tts_audio_path
+                
+                # Update interview state
+                st.session_state.interview_started = True
+                if control_decision == "stop":
+                    st.session_state.interview_active = False
+                
+                st.rerun()
     else:
         if not st.session_state.conversation_history:
             st.info("👋 Interview started. Please use the recording buttons below.")
