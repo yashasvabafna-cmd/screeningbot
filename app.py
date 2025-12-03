@@ -306,6 +306,24 @@ def get_robo_html(audio_path, autoplay=True):
     const progressBar = document.getElementById('progressBar');
     let isPlaying = false;
 
+    // Try to autoplay on load if attribute is present
+    window.addEventListener('load', function() {{
+        if (audio.hasAttribute('autoplay')) {{
+            var playPromise = audio.play();
+            if (playPromise !== undefined) {{
+                playPromise.then(_ => {{
+                    // Autoplay started!
+                    console.log("Autoplay started successfully");
+                }})
+                .catch(error => {{
+                    // Auto-play was prevented
+                    console.log("Autoplay prevented:", error);
+                    status.textContent = "Click Play to start";
+                }});
+            }}
+        }}
+    }});
+
     playBtn.addEventListener('click', function() {{
         if(isPlaying) {{
             audio.pause();
